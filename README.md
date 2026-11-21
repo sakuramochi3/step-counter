@@ -9,8 +9,9 @@ A cute, girly Android step counter app. Pink everywhere, pixel font everywhere.
 - **Last 7 days** — a rounded pink bar chart with weekday labels; today's bar is
   highlighted in a deeper pink.
 - **Cute UI** — pink gradient background, white rounded cards, heart icons.
-- **Pixel font** — "Press Start 2P" from Google Fonts, applied to all text via
-  Jetpack Compose (`ui-text-google-fonts`).
+- **Pixel font** — "Press Start 2P" from Google Fonts, loaded as a downloadable
+  font resource (`res/font/press_start_2p.xml`, prefetched via `preloaded_fonts`)
+  and applied to all text in Compose.
 
 ## How it works
 

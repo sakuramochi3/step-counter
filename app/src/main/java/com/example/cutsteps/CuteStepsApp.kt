@@ -1,6 +1,7 @@
 package com.example.cutsteps
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,14 +12,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,8 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import java.io.File
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cutsteps.ui.HomeScreen
@@ -42,6 +49,8 @@ import com.example.cutsteps.ui.theme.Pink600
 
 @Composable
 fun CuteStepsApp(viewModel: StepViewModel = viewModel()) {
+    val context = LocalContext.current
+    var crashText by remember { mutableStateOf(readLastCrash(context)) }
     val needsPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     val granted by viewModel.permissionGranted.collectAsStateWithLifecycle()
     var asked by remember { mutableStateOf(false) }
@@ -57,11 +66,36 @@ fun CuteStepsApp(viewModel: StepViewModel = viewModel()) {
         }
     }
 
+    if (crashText != null) {
+        AlertDialog(
+            onDismissRequest = { crashText = null },
+            title = { Text("CuteSteps crashed :(", style = MaterialTheme.typography.titleMedium) },
+            text = {
+                Text(
+                    text = crashText ?: "",
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { crashText = null }) { Text("ok") }
+            }
+        )
+    }
+
     if (needsPermission && !granted) {
         PermissionScreen(onAllow = { launcher.launch(Manifest.permission.ACTIVITY_RECOGNITION) })
     } else {
         HomeScreen(viewModel)
     }
+}
+
+private fun readLastCrash(context: Context): String? {
+    val file = File(context.filesDir, "crash/${CuteStepsApplication.LAST_CRASH_FILE}")
+    if (!file.exists()) return null
+    val text = file.readText()
+    file.delete()
+    return text
 }
 
 @Composable
