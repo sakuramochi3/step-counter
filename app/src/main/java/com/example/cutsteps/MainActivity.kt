@@ -31,15 +31,17 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun scheduleStepSampling() {
-        val request = PeriodicWorkRequestBuilder<StepSamplerWorker>(
-            15,
-            TimeUnit.MINUTES
-        ).setConstraints(Constraints.Builder().build()).build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            STEP_SAMPLING_WORK,
-            ExistingPeriodicWorkPolicy.KEEP,
-            request
-        )
+        runCatching {
+            val request = PeriodicWorkRequestBuilder<StepSamplerWorker>(
+                15,
+                TimeUnit.MINUTES
+            ).setConstraints(Constraints.Builder().build()).build()
+            WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                STEP_SAMPLING_WORK,
+                ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+        }
     }
 
     companion object {
