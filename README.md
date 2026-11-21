@@ -8,7 +8,10 @@ A cute, girly Android step counter app. Pink everywhere, pixel font everywhere.
   toward a 10,000-step daily goal.
 - **Last 7 days** — a rounded pink bar chart with weekday labels; today's bar is
   highlighted in a deeper pink.
-- **Cute UI** — pink gradient background, white rounded cards, heart icons.
+- **Cute UI** — Needy Girl Overdose-style Y2K look: pink polka-dot desktop,
+  white "windows" with pink title bars, window buttons, chunky pink borders,
+  heart/star stickers, and the Press Start 2P pixel font. Content respects
+  `safeDrawing` insets, so nothing hides behind the camera cutout/status bar.
 - **Pixel font** — "Press Start 2P" from Google Fonts, loaded as a downloadable
   font resource (`res/font/press_start_2p.xml`, prefetched via `preloaded_fonts`)
   and applied to all text in Compose.

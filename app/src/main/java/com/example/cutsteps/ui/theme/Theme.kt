@@ -22,6 +22,7 @@ val Pink500 = Color(0xFFFF5C9E)
 val Pink600 = Color(0xFFEF3D87)
 val Pink700 = Color(0xFFD12670)
 val Berry = Color(0xFF9C2B5B)
+val StarYellow = Color(0xFFFFD54F)
 
 @OptIn(ExperimentalTextApi::class)
 val PixelFontFamily = FontFamily(
